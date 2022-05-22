@@ -1,0 +1,4 @@
+.coverage
+db.sqlite3
+/.pytest_cache
+/.idea
