@@ -24,7 +24,11 @@ class Reservation(models.Model):
             )
 
     def _validate_rental_availability(self):
-        previous_reservation = Reservation.objects.filter(rental_id=self.rental_id).last()
+        previous_reservation = Reservation.objects.filter(rental_id=self.rental_id)\
+                                .exclude(checkout__gte=self.checkout)\
+                                .order_by("checkout")\
+                                .last()
+
         if previous_reservation and previous_reservation.checkout > self.checkin:
             raise ValidationError(
                 {"checkin": "The rental is already booked for this date"}

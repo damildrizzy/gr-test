@@ -10,8 +10,8 @@ def all_reservations(request):
     queryset = reservations.annotate(
         previous_reservation_id=Subquery(
             reservations.filter(rental_id=OuterRef("rental_id"))
-                .exclude(id__gte=OuterRef("id"))
-                .order_by("-id")
+                .exclude(checkout__gte=OuterRef("checkout"))
+                .order_by("-checkout")
                 .values("id")[:1]
         )
     )
